@@ -17,12 +17,21 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.melkerlarsson.geo-rock",
+      "buildNumber": "1.0.0"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
+      },
+      "versionCode": 1,
+      "package": "com.melker_larsson.georock",
+      "config": {
+        "googleMaps": {
+          "apiKey": "AIzaSyDKaQZoiRvqwsZE_PTSQvTX_2PzomvKVMY"
+        }
       }
     },
     "web": {
