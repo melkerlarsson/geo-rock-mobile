@@ -17,8 +17,9 @@ import Button from "../components/Button";
 import { BottomSheetMethods } from "@gorhom/bottom-sheet/lib/typescript/types";
 
 const { width, height } = Dimensions.get("window");
-const HORIZONTAL_PADDING = 40;
+const HORIZONTAL_PADDING = 30;
 const BOTTOM_PADDING = 20;
+const TOP_PADDING = 5;
 const CONTENT_WIDTH = width - 2 * HORIZONTAL_PADDING;
 
 const SHEET_HEIGHT_SMALL = 120;
@@ -42,7 +43,7 @@ const CustomBottomSheet = ({ bottomSheetRef }: CustomBottomSheetProps) => {
     overshootClamping: true,
     restDisplacementThreshold: 0.1,
     restSpeedThreshold: 0.1,
-    stiffness: 500,
+    stiffness: 400,
   });
 
   const animatedImageStyle = useAnimatedStyle(() => {
@@ -157,13 +158,15 @@ const styles = StyleSheet.create({
   contentContainer: {
     paddingHorizontal: HORIZONTAL_PADDING,
     paddingBottom: BOTTOM_PADDING,
+    paddingTop: TOP_PADDING,
     flex: 1,
     flexDirection: "column",
   },
   image: {
-    backgroundColor: "red",
+    backgroundColor: "#e6e6e6",
     position: "absolute",
     right: HORIZONTAL_PADDING,
+    top: TOP_PADDING,
     borderRadius: 10,
   },
   buttonContainer: {
