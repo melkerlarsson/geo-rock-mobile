@@ -1,17 +1,41 @@
-import { View, StyleSheet, Dimensions } from 'react-native';
-import MapView from 'react-native-maps';
+import { View, StyleSheet, Dimensions, Text, Button } from 'react-native';
+import MapView, { Marker } from 'react-native-maps';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import BottomSheet from '@gorhom/bottom-sheet';
+
+import CustomBottomSheet from '../components/CustomBottomSheet';
+import { useRef } from 'react';
+
+
+
 
 const { width, height } = Dimensions.get('window');
+
 interface HomeScreenProps {
 
 }
 
 const HomeScreen = ({}: HomeScreenProps) => {
 
+  const bottomSheetRef = useRef<BottomSheet>(null);
+
   return (
-    <View style={styles.container}>
-      <MapView style={styles.map} />
-    </View>
+
+    <GestureHandlerRootView style={styles.container}>
+      <MapView 
+        style={styles.map}
+        showsUserLocation={true}
+        showsCompass={false}
+        loadingEnabled={true}
+        initialRegion={{
+          longitude: 13.997127830419933, latitude: 56.264683520793525, latitudeDelta: 0.0922, longitudeDelta: 0.0421, }} 
+      >
+        <Marker coordinate={{ latitude: 56.264683520793525, longitude: 13.997127830419933 }} onPress={() => bottomSheetRef.current?.snapToIndex(0)} />
+      </MapView>
+        
+      <CustomBottomSheet bottomSheetRef={bottomSheetRef} />
+        
+    </GestureHandlerRootView>
   );
 };
 
