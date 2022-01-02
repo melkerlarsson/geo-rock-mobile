@@ -1,5 +1,5 @@
 import { View, StyleSheet, Text, ViewStyle, TextStyle } from "react-native";
-import { RectButton, TouchableOpacity } from "react-native-gesture-handler";
+import { TouchableOpacity } from "react-native-gesture-handler";
 
 interface ButtonProps {
   title: string;
