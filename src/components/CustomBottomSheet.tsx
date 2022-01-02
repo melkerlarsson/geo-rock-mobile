@@ -1,31 +1,41 @@
-import { useMemo } from 'react';
-import { View, StyleSheet, Dimensions, Text } from 'react-native';
+import { useMemo } from "react";
+import { View, StyleSheet, Dimensions, Text } from "react-native";
 
-import BottomSheet, { useBottomSheetSpringConfigs, BottomSheetBackdrop } from '@gorhom/bottom-sheet';
-import Animated, { interpolate, interpolateColors, useAnimatedStyle, useSharedValue, Extrapolate } from 'react-native-reanimated';
+import BottomSheet, {
+  useBottomSheetSpringConfigs,
+  BottomSheetBackdrop,
+} from "@gorhom/bottom-sheet";
+import Animated, {
+  interpolate,
+  interpolateColors,
+  useAnimatedStyle,
+  useSharedValue,
+  Extrapolate,
+} from "react-native-reanimated";
 
-import Button from '../components/Button';
-import { BottomSheetMethods } from '@gorhom/bottom-sheet/lib/typescript/types';
+import Button from "../components/Button";
+import { BottomSheetMethods } from "@gorhom/bottom-sheet/lib/typescript/types";
 
+const { width, height } = Dimensions.get("window");
+const HORIZONTAL_PADDING = 40;
+const BOTTOM_PADDING = 20;
+const CONTENT_WIDTH = width - 2 * HORIZONTAL_PADDING;
 
-const { width, height } = Dimensions.get('window');
-const horizontalPadding = 40;
-const maxContentWidth = width - 2 * horizontalPadding;
+const SHEET_HEIGHT_SMALL = 120;
+const SHEET_HEIGHT_LARGE = height * 0.7;
 
 interface CustomBottomSheetProps {
-  bottomSheetRef: React.RefObject<BottomSheetMethods>
+  bottomSheetRef: React.RefObject<BottomSheetMethods>;
 }
 
-
-
 const CustomBottomSheet = ({ bottomSheetRef }: CustomBottomSheetProps) => {
-
-  const snapPoints = useMemo(() => [200, '70%'], []);
+  const snapPoints = useMemo(
+    () => [SHEET_HEIGHT_SMALL, SHEET_HEIGHT_LARGE],
+    []
+  );
 
   const index = useSharedValue(0);
   const position = useSharedValue(0);
-
-
 
   const animationConfigs = useBottomSheetSpringConfigs({
     damping: 80,
@@ -35,15 +45,67 @@ const CustomBottomSheet = ({ bottomSheetRef }: CustomBottomSheetProps) => {
     stiffness: 500,
   });
 
-
-  const squareStyle = useAnimatedStyle(() => {
-
+  const animatedImageStyle = useAnimatedStyle(() => {
     return {
-      width: interpolate(index.value, [0, 1], [70, maxContentWidth], Extrapolate.CLAMP),
+      width: interpolate(
+        index.value,
+        [0, 1],
+        [120, CONTENT_WIDTH],
+        Extrapolate.CLAMP
+      ),
       height: interpolate(index.value, [0, 1], [70, 200], Extrapolate.CLAMP),
-
     };
   }, []);
+
+  const animatedButtonContainerStyle = useAnimatedStyle(() => {
+    return {
+      opacity: interpolate(index.value, [0, 0.2], [1, 0], Extrapolate.CLAMP),
+      //bottom: interpolate(index.value, [0, 1], [SHEET_HEIGHT_LARGE - SHEET_HEIGHT_SMALL + BOTTOM_PADDING, BOTTOM_PADDING], Extrapolate.CLAMP),
+    };
+  });
+
+  const animatedTextContainerStyle = useAnimatedStyle(() => {
+    return {
+      transform: [
+        {
+          translateY: interpolate(
+            index.value,
+            [0, 1],
+            [0, 220],
+            Extrapolate.CLAMP
+          ),
+        },
+      ],
+    };
+  });
+
+  const animatedLakeNameStyle = useAnimatedStyle(() => {
+    return {
+      fontSize: interpolate(index.value, [0, 1], [20, 35], Extrapolate.CLAMP),
+    };
+  });
+
+  const animatedDistanceStyle = useAnimatedStyle(() => {
+    return {
+      fontSize: interpolate(index.value, [0, 1], [16, 20], Extrapolate.CLAMP),
+    };
+  });
+
+  const animatedDescriptionStyle = useAnimatedStyle(() => {
+    return {
+      transform: [
+        {
+          translateY: interpolate(
+            index.value,
+            [0, 1],
+            [150, 0],
+            Extrapolate.CLAMP
+          ),
+        },
+      ],
+      opacity: interpolate(index.value, [0.5, 1], [0, 1], Extrapolate.CLAMP),
+    };
+  });
 
   return (
     <BottomSheet
@@ -57,26 +119,72 @@ const CustomBottomSheet = ({ bottomSheetRef }: CustomBottomSheetProps) => {
       animatedPosition={position}
     >
       <View style={styles.contentContainer}>
-        <View style={{}}>
-          <Text>Awesome 🎉 asdfhaskldfhasdfka jsdölkaj</Text>
-        </View>
+        {/* <Animated.View style={[styles.buttonContainer, styles.readMoreButtonContainer, animatedButtonContainerStyle]}>
+          <Button title="Read more" style={{ width: CONTENT_WIDTH }} onPress={() => bottomSheetRef.current?.expand()} />
+        </Animated.View> */}
 
-        <Animated.View style={[{ backgroundColor: "red", position: "absolute", right: horizontalPadding }, squareStyle]} />
+        <Animated.View style={animatedTextContainerStyle}>
+          <Animated.Text style={[animatedLakeNameStyle, styles.lakeName]}>
+            Tydingen
+          </Animated.Text>
+          <Animated.Text style={[animatedDistanceStyle, styles.distance]}>
+            2 km
+          </Animated.Text>
 
-        <View style={{ position: "absolute", bottom: 0 }}>
-          <Button title="Read more" onPress={() => bottomSheetRef.current?.expand()} />
-        </View>
+          <Animated.Text style={[animatedDescriptionStyle, styles.description]}>
+            This is a descriptive description of the rock which gives the user
+            enough information to know what to avoid...
+          </Animated.Text>
+        </Animated.View>
+
+        <Animated.View style={[styles.image, animatedImageStyle]} />
+
+        <Animated.View
+          style={[styles.buttonContainer, styles.closeButtonContainer]}
+        >
+          <Button
+            title="Close"
+            style={{ width: CONTENT_WIDTH }}
+            onPress={() => bottomSheetRef.current?.close()}
+          />
+        </Animated.View>
       </View>
-
     </BottomSheet>
   );
 };
 
 const styles = StyleSheet.create({
   contentContainer: {
-    paddingHorizontal: horizontalPadding,
+    paddingHorizontal: HORIZONTAL_PADDING,
+    paddingBottom: BOTTOM_PADDING,
     flex: 1,
     flexDirection: "column",
+  },
+  image: {
+    backgroundColor: "red",
+    position: "absolute",
+    right: HORIZONTAL_PADDING,
+    borderRadius: 10,
+  },
+  buttonContainer: {
+    position: "absolute",
+    width: width,
+    alignItems: "center",
+  },
+  readMoreButtonContainer: {
+    bottom: SHEET_HEIGHT_LARGE - SHEET_HEIGHT_SMALL + BOTTOM_PADDING,
+  },
+  closeButtonContainer: {
+    bottom: BOTTOM_PADDING,
+  },
+  lakeName: {
+    fontWeight: "600",
+  },
+  distance: {
+    fontWeight: "300",
+  },
+  description: {
+    marginTop: 20,
   },
 });
 

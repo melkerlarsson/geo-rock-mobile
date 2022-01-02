@@ -4,6 +4,7 @@ import { RootStack } from './src/navigation/index';
 
 import OnboardingScreen from './src/screens/OnboardingScreen';
 import HomeScreen from './src/screens/HomeScreen';
+
  
 
 export default function App() {
@@ -14,5 +15,6 @@ export default function App() {
         <RootStack.Screen name="Onboarding" component={OnboardingScreen} />
       </RootStack.Navigator>
     </NavigationContainer>
+    
   );
 }
