@@ -20,7 +20,7 @@ const HomeScreen = ({}: HomeScreenProps) => {
   const fetchData = async () => {
     const data = await fetchRocks();
     setRocks(data);
-  }
+  };
 
   useEffect(() => {
     fetchData();
@@ -40,8 +40,8 @@ const HomeScreen = ({}: HomeScreenProps) => {
           longitudeDelta: 0.0421,
         }}
       >
-        {
-          rocks && rocks.map(rock => {
+        {rocks &&
+          rocks.map((rock) => {
             return (
               <Marker
                 key={rock._id}
@@ -49,17 +49,13 @@ const HomeScreen = ({}: HomeScreenProps) => {
                   latitude: rock.latitude,
                   longitude: rock.longitude,
                 }}
-                onPress={
-                  () => {
-                    setSelectedRock(rock);
-                    bottomSheetRef.current?.snapToIndex(0);
-                  }
-                }
+                onPress={() => {
+                  setSelectedRock(rock);
+                  bottomSheetRef.current?.snapToIndex(0);
+                }}
               />
             );
-          })
-         
-        }
+          })}
       </MapView>
 
       <CustomBottomSheet rock={selectedRock} bottomSheetRef={bottomSheetRef} />

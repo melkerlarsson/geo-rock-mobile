@@ -31,7 +31,10 @@ interface CustomBottomSheetProps {
   rock: Rock | null;
 }
 
-const CustomBottomSheet = ({ bottomSheetRef, rock }: CustomBottomSheetProps) => {
+const CustomBottomSheet = ({
+  bottomSheetRef,
+  rock,
+}: CustomBottomSheetProps) => {
   const snapPoints = useMemo(
     () => [SHEET_HEIGHT_SMALL, SHEET_HEIGHT_LARGE],
     []
@@ -128,18 +131,21 @@ const CustomBottomSheet = ({ bottomSheetRef, rock }: CustomBottomSheetProps) => 
 
         <Animated.View style={animatedTextContainerStyle}>
           <Animated.Text style={[animatedLakeNameStyle, styles.lakeName]}>
-            { rock?.lake }
+            {rock?.lake}
           </Animated.Text>
           <Animated.Text style={[animatedDistanceStyle, styles.distance]}>
             2 km
           </Animated.Text>
 
           <Animated.Text style={[animatedDescriptionStyle, styles.description]}>
-            { rock?.description }
+            {rock?.description}
           </Animated.Text>
         </Animated.View>
 
-        <Animated.Image source={{ uri: rock?.imageUrl }} style={[styles.image, animatedImageStyle]} />
+        <Animated.Image
+          source={{ uri: rock?.imageUrl }}
+          style={[styles.image, animatedImageStyle]}
+        />
 
         <Animated.View
           style={[styles.buttonContainer, styles.closeButtonContainer]}
