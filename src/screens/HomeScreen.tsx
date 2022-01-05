@@ -4,7 +4,9 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 import BottomSheet from "@gorhom/bottom-sheet";
 
 import CustomBottomSheet from "../components/CustomBottomSheet";
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+import { Rock } from "../types/Rock";
+import { fetchRocks } from "../api/Rocks";
 
 const { width, height } = Dimensions.get("window");
 
@@ -12,6 +14,17 @@ interface HomeScreenProps {}
 
 const HomeScreen = ({}: HomeScreenProps) => {
   const bottomSheetRef = useRef<BottomSheet>(null);
+  const [rocks, setRocks] = useState<Rock[] | null>(null);
+  const [selectedRock, setSelectedRock] = useState<Rock | null>(null);
+
+  const fetchData = async () => {
+    const data = await fetchRocks();
+    setRocks(data);
+  }
+
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   return (
     <GestureHandlerRootView style={styles.container}>
@@ -27,16 +40,29 @@ const HomeScreen = ({}: HomeScreenProps) => {
           longitudeDelta: 0.0421,
         }}
       >
-        <Marker
-          coordinate={{
-            latitude: 56.264683520793525,
-            longitude: 13.997127830419933,
-          }}
-          onPress={() => bottomSheetRef.current?.snapToIndex(0)}
-        />
+        {
+          rocks && rocks.map(rock => {
+            return (
+              <Marker
+                key={rock._id}
+                coordinate={{
+                  latitude: rock.latitude,
+                  longitude: rock.longitude,
+                }}
+                onPress={
+                  () => {
+                    setSelectedRock(rock);
+                    bottomSheetRef.current?.snapToIndex(0);
+                  }
+                }
+              />
+            );
+          })
+         
+        }
       </MapView>
 
-      <CustomBottomSheet bottomSheetRef={bottomSheetRef} />
+      <CustomBottomSheet rock={selectedRock} bottomSheetRef={bottomSheetRef} />
     </GestureHandlerRootView>
   );
 };

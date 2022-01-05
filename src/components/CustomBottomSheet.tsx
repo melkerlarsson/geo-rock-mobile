@@ -15,6 +15,7 @@ import Animated, {
 
 import Button from "../components/Button";
 import { BottomSheetMethods } from "@gorhom/bottom-sheet/lib/typescript/types";
+import { Rock } from "../types/Rock";
 
 const { width, height } = Dimensions.get("window");
 const HORIZONTAL_PADDING = 30;
@@ -27,9 +28,10 @@ const SHEET_HEIGHT_LARGE = height * 0.7;
 
 interface CustomBottomSheetProps {
   bottomSheetRef: React.RefObject<BottomSheetMethods>;
+  rock: Rock | null;
 }
 
-const CustomBottomSheet = ({ bottomSheetRef }: CustomBottomSheetProps) => {
+const CustomBottomSheet = ({ bottomSheetRef, rock }: CustomBottomSheetProps) => {
   const snapPoints = useMemo(
     () => [SHEET_HEIGHT_SMALL, SHEET_HEIGHT_LARGE],
     []
@@ -126,19 +128,18 @@ const CustomBottomSheet = ({ bottomSheetRef }: CustomBottomSheetProps) => {
 
         <Animated.View style={animatedTextContainerStyle}>
           <Animated.Text style={[animatedLakeNameStyle, styles.lakeName]}>
-            Tydingen
+            { rock?.lake }
           </Animated.Text>
           <Animated.Text style={[animatedDistanceStyle, styles.distance]}>
             2 km
           </Animated.Text>
 
           <Animated.Text style={[animatedDescriptionStyle, styles.description]}>
-            This is a descriptive description of the rock which gives the user
-            enough information to know what to avoid...
+            { rock?.description }
           </Animated.Text>
         </Animated.View>
 
-        <Animated.View style={[styles.image, animatedImageStyle]} />
+        <Animated.Image source={{ uri: rock?.imageUrl }} style={[styles.image, animatedImageStyle]} />
 
         <Animated.View
           style={[styles.buttonContainer, styles.closeButtonContainer]}
