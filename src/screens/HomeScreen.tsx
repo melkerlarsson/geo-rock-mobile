@@ -6,7 +6,7 @@ import BottomSheet from "@gorhom/bottom-sheet";
 import CustomBottomSheet from "../components/CustomBottomSheet";
 import { useEffect, useRef, useState } from "react";
 import { Rock } from "../types/Rock";
-import { fetchRocks } from "../api/Rocks";
+import { fetchRocks } from "../api";
 
 const { width, height } = Dimensions.get("window");
 
